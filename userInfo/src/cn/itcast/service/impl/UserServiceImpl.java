@@ -2,6 +2,7 @@ package cn.itcast.service.impl;
 
 import cn.itcast.dao.UserDao;
 import cn.itcast.dao.impl.UserDaoImpl;
+import cn.itcast.domain.PageBean;
 import cn.itcast.domain.User;
 import cn.itcast.service.UserService;
 
@@ -48,5 +49,29 @@ public class UserServiceImpl implements UserService {
                 dao.delete(Integer.parseInt(uid));
             }
         }
+    }
+
+    @Override
+    public PageBean<User> findUserByPage(String _currentPage, String _rows) {
+        int currentPage = Integer.parseInt(_currentPage);
+        int rows = Integer.parseInt(_rows);
+        if (currentPage <=0){
+            currentPage =1;
+        }
+
+        PageBean<User> pb = new PageBean<>();
+        pb.setCurrentPage(currentPage);
+        pb.setRows(rows);
+
+        int totalCount = dao.findTotalCount();
+        pb.setTotalCount(totalCount);
+
+        int start = (currentPage -1) * rows;
+        List<User> list = dao.findByPage(start,rows);
+
+        int totalPage = totalCount % rows ==0 ? totalCount/rows : totalCount/rows +1;
+        pb.setTotalPage(totalPage);
+
+        return pb;
     }
 }
