@@ -59,17 +59,23 @@ public class UserServiceImpl implements UserService {
             currentPage =1;
         }
 
+        int totalCount = dao.findTotalCount();
+        int totalPage = totalCount % rows ==0 ? totalCount/rows : totalCount/rows +1;
+
+        if (currentPage > totalPage ){
+            currentPage = totalPage;
+        }
+
         PageBean<User> pb = new PageBean<>();
         pb.setCurrentPage(currentPage);
         pb.setRows(rows);
 
-        int totalCount = dao.findTotalCount();
         pb.setTotalCount(totalCount);
 
         int start = (currentPage -1) * rows;
+
         List<User> list = dao.findByPage(start,rows);
 
-        int totalPage = totalCount % rows ==0 ? totalCount/rows : totalCount/rows +1;
         pb.setTotalPage(totalPage);
 
         return pb;
