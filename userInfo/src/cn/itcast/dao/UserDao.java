@@ -3,6 +3,7 @@ package cn.itcast.dao;
 import cn.itcast.domain.User;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户操作的DAO
@@ -21,7 +22,7 @@ public interface UserDao {
 
     void update(User user);
 
-    int findTotalCount();
+    int findTotalCount(Map<String, String[]> condition);
 
-    List<User> findByPage(int start, int rows);
+    List<User> findByPage(int start, int rows, Map<String, String[]> condition);
 }
